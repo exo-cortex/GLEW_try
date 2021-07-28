@@ -6,6 +6,8 @@
 #include <fstream>
 #include <sstream>
 
+// #include "Renderer.hpp"
+
 #define ASSERT(x) if (!(x))   // this is very hackedtogether ... luki probiert aus
 #define GLCall(x) GLClearError();\
 	x;\
@@ -200,7 +202,11 @@ int main(void)
 	int location = glGetUniformLocation(shader, "u_Color");
 
 	float r = 0.0f;
-	float increment = 0.025f;
+	float g = 0.0f;
+	float b = 0.0f;
+	float r_increment = 0.035f;
+	float g_increment = 0.0335f;
+	float b_increment = 0.0475f;
 
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(window))
@@ -209,7 +215,7 @@ int main(void)
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		GLCall(glUseProgram(shader));
-		GLCall(glUniform4f(location, r, 0.2f, 0.95f, 1.0f));
+		GLCall(glUniform4f(location, r, g, b, 1.0f));
 
 		GLCall(glBindVertexArray(vao));
 		GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo));
@@ -217,11 +223,24 @@ int main(void)
 		GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr)); // with index buffer, MUST be UNSIGNED 
 
 		if (r > 1.0f)
-			increment = -0.05f;
+			r_increment = -0.05f;
 		else if (r < 0.0f )
-			increment = 0.01f;
+			r_increment = 0.01f;
+		r += r_increment;
 
-		r += increment;
+		if (g > 1.0f)
+			g_increment = -0.05f;
+		else if (r < 0.0f )
+			g_increment = 0.01f;
+		g += g_increment;
+
+		if (b > 1.0f)
+			b_increment = -0.05f;
+		else if (r < 0.0f )
+			b_increment = 0.01f;
+		b += b_increment;
+
+
 		/* Swap front and back buffers */
 		glfwSwapBuffers(window);
 
